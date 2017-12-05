@@ -99,7 +99,3 @@ ENV/
 
 # mypy
 .mypy_cache/
-
-# tensorboard
-*/events.out.tfevents.1512147635.ryuky-HP-Pavilion-Gaming-Notebook
-
