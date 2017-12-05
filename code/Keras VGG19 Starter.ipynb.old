@@ -1,0 +1,1002 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "Using TensorFlow backend.\n",
+      "/home/ryuky/anaconda3/lib/python3.6/importlib/_bootstrap.py:205: RuntimeWarning: compiletime version 3.5 of module 'tensorflow.python.framework.fast_tensor_util' does not match runtime version 3.6\n",
+      "  return f(*args, **kwds)\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "labels.csv\n",
+      "sample_submission.csv\n",
+      "test\n",
+      "train\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "# This Python 3 environment comes with many helpful analytics libraries installed\n",
+    "# It is defined by the kaggle/python docker image: https://github.com/kaggle/docker-python\n",
+    "# For example, here's several helpful packages to load in \n",
+    "import numpy as np # linear algebra\n",
+    "import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)\n",
+    "import keras\n",
+    "from keras.applications.vgg19 import VGG19\n",
+    "from keras.models import Model\n",
+    "from keras.layers import Dense, Dropout, Flatten\n",
+    "\n",
+    "import os\n",
+    "from tqdm import tqdm\n",
+    "from sklearn import preprocessing\n",
+    "from sklearn.model_selection import train_test_split\n",
+    "import cv2\n",
+    "# Input data files are available in the \"../input/\" directory.\n",
+    "# For example, running this (by clicking run or pressing Shift+Enter) will list the files in the input directory\n",
+    "\n",
+    "from subprocess import check_output\n",
+    "print(check_output([\"ls\", \"../input\"]).decode(\"utf8\"))\n",
+    "\n",
+    "# Any results you write to the current directory are saved as output."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "# parameters\n",
+    "tensorboard_dir = '../tb/run1';\n",
+    "tensorboardFlag = True;\n",
+    "\n",
+    "batchSize = 64;\n",
+    "epochs = 10;"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "First we will read in the csv's so we can see some more information on the filenames and breeds"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Training images:  10222\n",
+      "Test images:  10357\n"
+     ]
+    }
+   ],
+   "source": [
+    "df_train = pd.read_csv('../input/labels.csv')\n",
+    "df_test = pd.read_csv('../input/sample_submission.csv')\n",
+    "\n",
+    "print('Training images: ',df_train.shape[0])\n",
+    "print('Test images: ',df_test.shape[0])\n",
+    "\n",
+    "# reduce dimensionality\n",
+    "df_train = df_train.head(100)\n",
+    "df_test = df_test.head(100)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style>\n",
+       "    .dataframe thead tr:only-child th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: left;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>id</th>\n",
+       "      <th>breed</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>000bec180eb18c7604dcecc8fe0dba07</td>\n",
+       "      <td>boston_bull</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>001513dfcb2ffafc82cccf4d8bbaba97</td>\n",
+       "      <td>dingo</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>001cdf01b096e06d78e9e5112d419397</td>\n",
+       "      <td>pekinese</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>00214f311d5d2247d5dfe4fe24b2303d</td>\n",
+       "      <td>bluetick</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>0021f9ceb3235effd7fcde7f7538ed62</td>\n",
+       "      <td>golden_retriever</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5</th>\n",
+       "      <td>002211c81b498ef88e1b40b9abf84e1d</td>\n",
+       "      <td>bedlington_terrier</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>6</th>\n",
+       "      <td>00290d3e1fdd27226ba27a8ce248ce85</td>\n",
+       "      <td>bedlington_terrier</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>7</th>\n",
+       "      <td>002a283a315af96eaea0e28e7163b21b</td>\n",
+       "      <td>borzoi</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>8</th>\n",
+       "      <td>003df8b8a8b05244b1d920bb6cf451f9</td>\n",
+       "      <td>basenji</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>9</th>\n",
+       "      <td>0042188c895a2f14ef64a918ed9c7b64</td>\n",
+       "      <td>scottish_deerhound</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                                 id               breed\n",
+       "0  000bec180eb18c7604dcecc8fe0dba07         boston_bull\n",
+       "1  001513dfcb2ffafc82cccf4d8bbaba97               dingo\n",
+       "2  001cdf01b096e06d78e9e5112d419397            pekinese\n",
+       "3  00214f311d5d2247d5dfe4fe24b2303d            bluetick\n",
+       "4  0021f9ceb3235effd7fcde7f7538ed62    golden_retriever\n",
+       "5  002211c81b498ef88e1b40b9abf84e1d  bedlington_terrier\n",
+       "6  00290d3e1fdd27226ba27a8ce248ce85  bedlington_terrier\n",
+       "7  002a283a315af96eaea0e28e7163b21b              borzoi\n",
+       "8  003df8b8a8b05244b1d920bb6cf451f9             basenji\n",
+       "9  0042188c895a2f14ef64a918ed9c7b64  scottish_deerhound"
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df_train.head(10)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We can see that the breed needs to be one-hot encoded for the final submission, so we will now do this."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "targets_series = pd.Series(df_train['breed'])\n",
+    "one_hot = pd.get_dummies(targets_series, sparse = True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "one_hot_labels = np.asarray(one_hot)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Next we will read in all of the images for test and train, using a for loop through the values of the csv files. I have also set an im_size variable which sets the size for the image to be re-sized to, 90x90 px, you should play with this number to see how it affects accuracy."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "im_size = 90"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "x_train = []\n",
+    "y_train = []\n",
+    "x_test = []"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "100%|██████████| 100/100 [00:00<00:00, 291.38it/s]\n"
+     ]
+    }
+   ],
+   "source": [
+    "i = 0 \n",
+    "for f, breed in tqdm(df_train.values):\n",
+    "    img = cv2.imread('../input/train/{}.jpg'.format(f))\n",
+    "    label = one_hot_labels[i]\n",
+    "    x_train.append(cv2.resize(img, (im_size, im_size)))\n",
+    "    y_train.append(label)\n",
+    "    i += 1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "100%|██████████| 100/100 [00:00<00:00, 279.61it/s]\n"
+     ]
+    }
+   ],
+   "source": [
+    "for f in tqdm(df_test['id'].values):\n",
+    "    img = cv2.imread('../input/test/{}.jpg'.format(f))\n",
+    "    x_test.append(cv2.resize(img, (im_size, im_size)))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "y_train_raw = np.array(y_train, np.uint8)\n",
+    "x_train_raw = np.array(x_train, np.float32) / 255.\n",
+    "x_test  = np.array(x_test, np.float32) / 255."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We check the shape of the outputs to make sure everyting went as expected."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "(100, 90, 90, 3)\n",
+      "(100, 62)\n",
+      "(100, 90, 90, 3)\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(x_train_raw.shape)\n",
+    "print(y_train_raw.shape)\n",
+    "print(x_test.shape)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We can see above that there are 120 different breeds. We can put this in a num_class variable below that can then be used when creating the CNN model."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Number of classes:  62\n"
+     ]
+    }
+   ],
+   "source": [
+    "num_class = y_train_raw.shape[1]\n",
+    "print('Number of classes: ', num_class)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "It is important to create a validation set so that you can gauge the performance of your model on independent data, unseen to the model in training. We do this by splitting the current training set (x_train_raw) and the corresponding labels (y_train_raw) so that we set aside 30 % of the data at random and put these in validation sets (X_valid and Y_valid).\n",
+    "\n",
+    "* This split needs to be improved so that it contains images from every class, with 120 separate classes some can not be represented and so the validation score is not informative."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "X_train, X_valid, Y_train, Y_valid = train_test_split(x_train_raw, y_train_raw, test_size=0.3, random_state=1)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now we build the CNN architecture. Here we are using a pre-trained model VGG19 which has already been trained to identify many different dog breeds (as well as a lot of other objects from the imagenet dataset see here for more information: http://image-net.org/about-overview). Unfortunately it doesn't seem possible to downlod the weights from within this kernel so make sure you set the weights argument to 'imagenet' and not None, as it currently is below.\n",
+    "\n",
+    "We then remove the final layer and instead replace it with a single dense layer with the number of nodes corresponding to the number of breed classes we have (120)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Downloading data from https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vgg19_weights_tf_dim_ordering_tf_kernels_notop.h5\n",
+      "80142336/80134624 [==============================] - 53s 1us/step\n",
+      "Tensorboard activated\n",
+      "_________________________________________________________________\n",
+      "Layer (type)                 Output Shape              Param #   \n",
+      "=================================================================\n",
+      "input_1 (InputLayer)         (None, 90, 90, 3)         0         \n",
+      "_________________________________________________________________\n",
+      "block1_conv1 (Conv2D)        (None, 90, 90, 64)        1792      \n",
+      "_________________________________________________________________\n",
+      "block1_conv2 (Conv2D)        (None, 90, 90, 64)        36928     \n",
+      "_________________________________________________________________\n",
+      "block1_pool (MaxPooling2D)   (None, 45, 45, 64)        0         \n",
+      "_________________________________________________________________\n",
+      "block2_conv1 (Conv2D)        (None, 45, 45, 128)       73856     \n",
+      "_________________________________________________________________\n",
+      "block2_conv2 (Conv2D)        (None, 45, 45, 128)       147584    \n",
+      "_________________________________________________________________\n",
+      "block2_pool (MaxPooling2D)   (None, 22, 22, 128)       0         \n",
+      "_________________________________________________________________\n",
+      "block3_conv1 (Conv2D)        (None, 22, 22, 256)       295168    \n",
+      "_________________________________________________________________\n",
+      "block3_conv2 (Conv2D)        (None, 22, 22, 256)       590080    \n",
+      "_________________________________________________________________\n",
+      "block3_conv3 (Conv2D)        (None, 22, 22, 256)       590080    \n",
+      "_________________________________________________________________\n",
+      "block3_conv4 (Conv2D)        (None, 22, 22, 256)       590080    \n",
+      "_________________________________________________________________\n",
+      "block3_pool (MaxPooling2D)   (None, 11, 11, 256)       0         \n",
+      "_________________________________________________________________\n",
+      "block4_conv1 (Conv2D)        (None, 11, 11, 512)       1180160   \n",
+      "_________________________________________________________________\n",
+      "block4_conv2 (Conv2D)        (None, 11, 11, 512)       2359808   \n",
+      "_________________________________________________________________\n",
+      "block4_conv3 (Conv2D)        (None, 11, 11, 512)       2359808   \n",
+      "_________________________________________________________________\n",
+      "block4_conv4 (Conv2D)        (None, 11, 11, 512)       2359808   \n",
+      "_________________________________________________________________\n",
+      "block4_pool (MaxPooling2D)   (None, 5, 5, 512)         0         \n",
+      "_________________________________________________________________\n",
+      "block5_conv1 (Conv2D)        (None, 5, 5, 512)         2359808   \n",
+      "_________________________________________________________________\n",
+      "block5_conv2 (Conv2D)        (None, 5, 5, 512)         2359808   \n",
+      "_________________________________________________________________\n",
+      "block5_conv3 (Conv2D)        (None, 5, 5, 512)         2359808   \n",
+      "_________________________________________________________________\n",
+      "block5_conv4 (Conv2D)        (None, 5, 5, 512)         2359808   \n",
+      "_________________________________________________________________\n",
+      "block5_pool (MaxPooling2D)   (None, 2, 2, 512)         0         \n",
+      "_________________________________________________________________\n",
+      "flatten_1 (Flatten)          (None, 2048)              0         \n",
+      "_________________________________________________________________\n",
+      "dense_1 (Dense)              (None, 62)                127038    \n",
+      "=================================================================\n",
+      "Total params: 20,151,422\n",
+      "Trainable params: 127,038\n",
+      "Non-trainable params: 20,024,384\n",
+      "_________________________________________________________________\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Create the base pre-trained model\n",
+    "# Can't download weights in the kernel\n",
+    "base_model = VGG19(#weights='imagenet',\n",
+    "    weights = 'imagenet', include_top=False, input_shape=(im_size, im_size, 3))\n",
+    "\n",
+    "# Add a new top layer\n",
+    "x = base_model.output\n",
+    "x = Flatten()(x)\n",
+    "predictions = Dense(num_class, activation='softmax')(x)\n",
+    "\n",
+    "# This is the model we will train\n",
+    "model = Model(inputs=base_model.input, outputs=predictions)\n",
+    "\n",
+    "# First: train only the top layers (which were randomly initialized)\n",
+    "for layer in base_model.layers:\n",
+    "    layer.trainable = False\n",
+    "\n",
+    "model.compile(loss='categorical_crossentropy', \n",
+    "              optimizer='adam', \n",
+    "              metrics=['accuracy'])\n",
+    "\n",
+    "callbacks_list = [];\n",
+    "callbacks_list.append(keras.callbacks.EarlyStopping(\n",
+    "    monitor='val_acc',\n",
+    "    patience=10,\n",
+    "    verbose=1));\n",
+    "if tensorboardFlag:\n",
+    "    callbacks_list.append(keras.callbacks.TensorBoard(\n",
+    "            log_dir=tensorboard_dir,\n",
+    "            histogram_freq=1,\n",
+    "            write_graph=True,\n",
+    "            write_images=True));\n",
+    "    print('Tensorboard activated')\n",
+    "else:\n",
+    "    print('Tensorboard NOT activated')\n",
+    "\n",
+    "\n",
+    "model.summary()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Train on 70 samples, validate on 30 samples\n",
+      "Epoch 1/10\n",
+      "70/70 [==============================] - 13s 181ms/step - loss: 4.6295 - acc: 0.0143 - val_loss: 4.6914 - val_acc: 0.0333\n",
+      "Epoch 2/10\n",
+      "70/70 [==============================] - 13s 186ms/step - loss: 3.9302 - acc: 0.0429 - val_loss: 4.9551 - val_acc: 0.0000e+00\n",
+      "Epoch 3/10\n",
+      "70/70 [==============================] - 13s 182ms/step - loss: 3.4840 - acc: 0.0857 - val_loss: 5.2571 - val_acc: 0.0000e+00\n",
+      "Epoch 4/10\n",
+      "70/70 [==============================] - 13s 181ms/step - loss: 3.1628 - acc: 0.1143 - val_loss: 5.5536 - val_acc: 0.0000e+00\n",
+      "Epoch 5/10\n",
+      "70/70 [==============================] - 13s 189ms/step - loss: 2.8924 - acc: 0.1429 - val_loss: 5.8005 - val_acc: 0.0000e+00\n",
+      "Epoch 6/10\n",
+      "70/70 [==============================] - 13s 181ms/step - loss: 2.6401 - acc: 0.2714 - val_loss: 5.9906 - val_acc: 0.0000e+00\n",
+      "Epoch 7/10\n",
+      "70/70 [==============================] - 13s 179ms/step - loss: 2.3898 - acc: 0.3857 - val_loss: 6.1461 - val_acc: 0.0000e+00\n",
+      "Epoch 8/10\n",
+      "70/70 [==============================] - 13s 180ms/step - loss: 2.1580 - acc: 0.5714 - val_loss: 6.2645 - val_acc: 0.0000e+00\n",
+      "Epoch 9/10\n",
+      "70/70 [==============================] - 13s 180ms/step - loss: 1.9484 - acc: 0.6429 - val_loss: 6.3635 - val_acc: 0.0000e+00\n",
+      "Epoch 10/10\n",
+      "70/70 [==============================] - 13s 179ms/step - loss: 1.7561 - acc: 0.7429 - val_loss: 6.4428 - val_acc: 0.0000e+00\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "<keras.callbacks.History at 0x7f3488c57da0>"
+      ]
+     },
+     "execution_count": 16,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "model.fit(X_train, Y_train,\n",
+    "          epochs=epochs,\n",
+    "          batch_size = batchSize,\n",
+    "          validation_data=(X_valid, Y_valid),\n",
+    "          verbose=1,\n",
+    "          callbacks=callbacks_list)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Remember, accuracy is low here because we are not taking advantage of the pre-trained weights as they cannot be downloaded in the kernel. This means we are training the wights from scratch and I we have only run 1 epoch due to the hardware constraints in the kernel.\n",
+    "\n",
+    "Next we will make our predictions."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "100/100 [==============================] - 9s 92ms/step\n"
+     ]
+    }
+   ],
+   "source": [
+    "preds = model.predict(x_test, verbose=1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style>\n",
+       "    .dataframe thead tr:only-child th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: left;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>id</th>\n",
+       "      <th>affenpinscher</th>\n",
+       "      <th>african_hunting_dog</th>\n",
+       "      <th>appenzeller</th>\n",
+       "      <th>australian_terrier</th>\n",
+       "      <th>basenji</th>\n",
+       "      <th>basset</th>\n",
+       "      <th>bedlington_terrier</th>\n",
+       "      <th>black-and-tan_coonhound</th>\n",
+       "      <th>bloodhound</th>\n",
+       "      <th>...</th>\n",
+       "      <th>scottish_deerhound</th>\n",
+       "      <th>shetland_sheepdog</th>\n",
+       "      <th>shih-tzu</th>\n",
+       "      <th>standard_schnauzer</th>\n",
+       "      <th>tibetan_terrier</th>\n",
+       "      <th>toy_poodle</th>\n",
+       "      <th>walker_hound</th>\n",
+       "      <th>weimaraner</th>\n",
+       "      <th>welsh_springer_spaniel</th>\n",
+       "      <th>wire-haired_fox_terrier</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>000621fb3cbb32d8935728e48679680e</td>\n",
+       "      <td>0.034822</td>\n",
+       "      <td>0.023369</td>\n",
+       "      <td>0.001218</td>\n",
+       "      <td>0.008128</td>\n",
+       "      <td>0.004142</td>\n",
+       "      <td>0.000019</td>\n",
+       "      <td>0.026429</td>\n",
+       "      <td>0.013153</td>\n",
+       "      <td>0.008564</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.057233</td>\n",
+       "      <td>0.000205</td>\n",
+       "      <td>0.006516</td>\n",
+       "      <td>0.003366</td>\n",
+       "      <td>0.000838</td>\n",
+       "      <td>0.008531</td>\n",
+       "      <td>0.015289</td>\n",
+       "      <td>0.011521</td>\n",
+       "      <td>0.007685</td>\n",
+       "      <td>0.015945</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>00102ee9d8eb90812350685311fe5890</td>\n",
+       "      <td>0.011956</td>\n",
+       "      <td>0.038411</td>\n",
+       "      <td>0.008318</td>\n",
+       "      <td>0.034900</td>\n",
+       "      <td>0.003581</td>\n",
+       "      <td>0.000066</td>\n",
+       "      <td>0.034309</td>\n",
+       "      <td>0.010230</td>\n",
+       "      <td>0.006517</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.031513</td>\n",
+       "      <td>0.000424</td>\n",
+       "      <td>0.004808</td>\n",
+       "      <td>0.009547</td>\n",
+       "      <td>0.009141</td>\n",
+       "      <td>0.013460</td>\n",
+       "      <td>0.019772</td>\n",
+       "      <td>0.005299</td>\n",
+       "      <td>0.004815</td>\n",
+       "      <td>0.065749</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>0012a730dfa437f5f3613fb75efcd4ce</td>\n",
+       "      <td>0.007924</td>\n",
+       "      <td>0.081537</td>\n",
+       "      <td>0.009696</td>\n",
+       "      <td>0.008838</td>\n",
+       "      <td>0.006484</td>\n",
+       "      <td>0.000126</td>\n",
+       "      <td>0.045497</td>\n",
+       "      <td>0.004156</td>\n",
+       "      <td>0.010113</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.058236</td>\n",
+       "      <td>0.000293</td>\n",
+       "      <td>0.007332</td>\n",
+       "      <td>0.006129</td>\n",
+       "      <td>0.009211</td>\n",
+       "      <td>0.017880</td>\n",
+       "      <td>0.046762</td>\n",
+       "      <td>0.006554</td>\n",
+       "      <td>0.005093</td>\n",
+       "      <td>0.059268</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>001510bc8570bbeee98c8d80c8a95ec1</td>\n",
+       "      <td>0.005954</td>\n",
+       "      <td>0.057660</td>\n",
+       "      <td>0.013951</td>\n",
+       "      <td>0.005339</td>\n",
+       "      <td>0.007692</td>\n",
+       "      <td>0.000102</td>\n",
+       "      <td>0.072573</td>\n",
+       "      <td>0.008204</td>\n",
+       "      <td>0.018978</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.055024</td>\n",
+       "      <td>0.000299</td>\n",
+       "      <td>0.006915</td>\n",
+       "      <td>0.011418</td>\n",
+       "      <td>0.002600</td>\n",
+       "      <td>0.013756</td>\n",
+       "      <td>0.035258</td>\n",
+       "      <td>0.010192</td>\n",
+       "      <td>0.009189</td>\n",
+       "      <td>0.044931</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>001a5f3114548acdefa3d4da05474c2e</td>\n",
+       "      <td>0.079452</td>\n",
+       "      <td>0.065200</td>\n",
+       "      <td>0.002139</td>\n",
+       "      <td>0.019739</td>\n",
+       "      <td>0.007536</td>\n",
+       "      <td>0.000097</td>\n",
+       "      <td>0.060161</td>\n",
+       "      <td>0.003370</td>\n",
+       "      <td>0.010055</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.030724</td>\n",
+       "      <td>0.000355</td>\n",
+       "      <td>0.037111</td>\n",
+       "      <td>0.006732</td>\n",
+       "      <td>0.002419</td>\n",
+       "      <td>0.031522</td>\n",
+       "      <td>0.027173</td>\n",
+       "      <td>0.014260</td>\n",
+       "      <td>0.001590</td>\n",
+       "      <td>0.039346</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5</th>\n",
+       "      <td>00225dcd3e4d2410dd53239f95c0352f</td>\n",
+       "      <td>0.010627</td>\n",
+       "      <td>0.024953</td>\n",
+       "      <td>0.003805</td>\n",
+       "      <td>0.013228</td>\n",
+       "      <td>0.004301</td>\n",
+       "      <td>0.000051</td>\n",
+       "      <td>0.123672</td>\n",
+       "      <td>0.007277</td>\n",
+       "      <td>0.012188</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.026335</td>\n",
+       "      <td>0.000217</td>\n",
+       "      <td>0.015258</td>\n",
+       "      <td>0.005302</td>\n",
+       "      <td>0.001011</td>\n",
+       "      <td>0.017499</td>\n",
+       "      <td>0.022469</td>\n",
+       "      <td>0.009869</td>\n",
+       "      <td>0.004302</td>\n",
+       "      <td>0.042585</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>6</th>\n",
+       "      <td>002c2a3117c2193b4d26400ce431eebd</td>\n",
+       "      <td>0.004839</td>\n",
+       "      <td>0.041772</td>\n",
+       "      <td>0.010505</td>\n",
+       "      <td>0.014171</td>\n",
+       "      <td>0.004931</td>\n",
+       "      <td>0.000146</td>\n",
+       "      <td>0.042287</td>\n",
+       "      <td>0.005525</td>\n",
+       "      <td>0.024759</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.116026</td>\n",
+       "      <td>0.001034</td>\n",
+       "      <td>0.004148</td>\n",
+       "      <td>0.018008</td>\n",
+       "      <td>0.010027</td>\n",
+       "      <td>0.013552</td>\n",
+       "      <td>0.056465</td>\n",
+       "      <td>0.003236</td>\n",
+       "      <td>0.008870</td>\n",
+       "      <td>0.102081</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>7</th>\n",
+       "      <td>002c58d413a521ae8d1a5daeb35fc803</td>\n",
+       "      <td>0.001513</td>\n",
+       "      <td>0.001023</td>\n",
+       "      <td>0.001187</td>\n",
+       "      <td>0.070144</td>\n",
+       "      <td>0.000603</td>\n",
+       "      <td>0.000019</td>\n",
+       "      <td>0.026298</td>\n",
+       "      <td>0.010179</td>\n",
+       "      <td>0.004295</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.041680</td>\n",
+       "      <td>0.000133</td>\n",
+       "      <td>0.002430</td>\n",
+       "      <td>0.003334</td>\n",
+       "      <td>0.001487</td>\n",
+       "      <td>0.003805</td>\n",
+       "      <td>0.018211</td>\n",
+       "      <td>0.001588</td>\n",
+       "      <td>0.000545</td>\n",
+       "      <td>0.044459</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>8</th>\n",
+       "      <td>002f80396f1e3db687c5932d7978b196</td>\n",
+       "      <td>0.015620</td>\n",
+       "      <td>0.107993</td>\n",
+       "      <td>0.004220</td>\n",
+       "      <td>0.027069</td>\n",
+       "      <td>0.009699</td>\n",
+       "      <td>0.000151</td>\n",
+       "      <td>0.033642</td>\n",
+       "      <td>0.005737</td>\n",
+       "      <td>0.011488</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.030035</td>\n",
+       "      <td>0.000477</td>\n",
+       "      <td>0.012970</td>\n",
+       "      <td>0.010804</td>\n",
+       "      <td>0.004357</td>\n",
+       "      <td>0.059367</td>\n",
+       "      <td>0.012617</td>\n",
+       "      <td>0.006945</td>\n",
+       "      <td>0.006243</td>\n",
+       "      <td>0.069045</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>9</th>\n",
+       "      <td>0036c6bcec6031be9e62a257b1c3c442</td>\n",
+       "      <td>0.011943</td>\n",
+       "      <td>0.053512</td>\n",
+       "      <td>0.002051</td>\n",
+       "      <td>0.009829</td>\n",
+       "      <td>0.003947</td>\n",
+       "      <td>0.000033</td>\n",
+       "      <td>0.063189</td>\n",
+       "      <td>0.007195</td>\n",
+       "      <td>0.006083</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.043963</td>\n",
+       "      <td>0.000303</td>\n",
+       "      <td>0.007270</td>\n",
+       "      <td>0.006914</td>\n",
+       "      <td>0.002821</td>\n",
+       "      <td>0.020570</td>\n",
+       "      <td>0.022229</td>\n",
+       "      <td>0.019105</td>\n",
+       "      <td>0.002897</td>\n",
+       "      <td>0.062133</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>10 rows × 63 columns</p>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                                 id  affenpinscher  african_hunting_dog  \\\n",
+       "0  000621fb3cbb32d8935728e48679680e       0.034822             0.023369   \n",
+       "1  00102ee9d8eb90812350685311fe5890       0.011956             0.038411   \n",
+       "2  0012a730dfa437f5f3613fb75efcd4ce       0.007924             0.081537   \n",
+       "3  001510bc8570bbeee98c8d80c8a95ec1       0.005954             0.057660   \n",
+       "4  001a5f3114548acdefa3d4da05474c2e       0.079452             0.065200   \n",
+       "5  00225dcd3e4d2410dd53239f95c0352f       0.010627             0.024953   \n",
+       "6  002c2a3117c2193b4d26400ce431eebd       0.004839             0.041772   \n",
+       "7  002c58d413a521ae8d1a5daeb35fc803       0.001513             0.001023   \n",
+       "8  002f80396f1e3db687c5932d7978b196       0.015620             0.107993   \n",
+       "9  0036c6bcec6031be9e62a257b1c3c442       0.011943             0.053512   \n",
+       "\n",
+       "   appenzeller  australian_terrier   basenji    basset  bedlington_terrier  \\\n",
+       "0     0.001218            0.008128  0.004142  0.000019            0.026429   \n",
+       "1     0.008318            0.034900  0.003581  0.000066            0.034309   \n",
+       "2     0.009696            0.008838  0.006484  0.000126            0.045497   \n",
+       "3     0.013951            0.005339  0.007692  0.000102            0.072573   \n",
+       "4     0.002139            0.019739  0.007536  0.000097            0.060161   \n",
+       "5     0.003805            0.013228  0.004301  0.000051            0.123672   \n",
+       "6     0.010505            0.014171  0.004931  0.000146            0.042287   \n",
+       "7     0.001187            0.070144  0.000603  0.000019            0.026298   \n",
+       "8     0.004220            0.027069  0.009699  0.000151            0.033642   \n",
+       "9     0.002051            0.009829  0.003947  0.000033            0.063189   \n",
+       "\n",
+       "   black-and-tan_coonhound  bloodhound           ...             \\\n",
+       "0                 0.013153    0.008564           ...              \n",
+       "1                 0.010230    0.006517           ...              \n",
+       "2                 0.004156    0.010113           ...              \n",
+       "3                 0.008204    0.018978           ...              \n",
+       "4                 0.003370    0.010055           ...              \n",
+       "5                 0.007277    0.012188           ...              \n",
+       "6                 0.005525    0.024759           ...              \n",
+       "7                 0.010179    0.004295           ...              \n",
+       "8                 0.005737    0.011488           ...              \n",
+       "9                 0.007195    0.006083           ...              \n",
+       "\n",
+       "   scottish_deerhound  shetland_sheepdog  shih-tzu  standard_schnauzer  \\\n",
+       "0            0.057233           0.000205  0.006516            0.003366   \n",
+       "1            0.031513           0.000424  0.004808            0.009547   \n",
+       "2            0.058236           0.000293  0.007332            0.006129   \n",
+       "3            0.055024           0.000299  0.006915            0.011418   \n",
+       "4            0.030724           0.000355  0.037111            0.006732   \n",
+       "5            0.026335           0.000217  0.015258            0.005302   \n",
+       "6            0.116026           0.001034  0.004148            0.018008   \n",
+       "7            0.041680           0.000133  0.002430            0.003334   \n",
+       "8            0.030035           0.000477  0.012970            0.010804   \n",
+       "9            0.043963           0.000303  0.007270            0.006914   \n",
+       "\n",
+       "   tibetan_terrier  toy_poodle  walker_hound  weimaraner  \\\n",
+       "0         0.000838    0.008531      0.015289    0.011521   \n",
+       "1         0.009141    0.013460      0.019772    0.005299   \n",
+       "2         0.009211    0.017880      0.046762    0.006554   \n",
+       "3         0.002600    0.013756      0.035258    0.010192   \n",
+       "4         0.002419    0.031522      0.027173    0.014260   \n",
+       "5         0.001011    0.017499      0.022469    0.009869   \n",
+       "6         0.010027    0.013552      0.056465    0.003236   \n",
+       "7         0.001487    0.003805      0.018211    0.001588   \n",
+       "8         0.004357    0.059367      0.012617    0.006945   \n",
+       "9         0.002821    0.020570      0.022229    0.019105   \n",
+       "\n",
+       "   welsh_springer_spaniel  wire-haired_fox_terrier  \n",
+       "0                0.007685                 0.015945  \n",
+       "1                0.004815                 0.065749  \n",
+       "2                0.005093                 0.059268  \n",
+       "3                0.009189                 0.044931  \n",
+       "4                0.001590                 0.039346  \n",
+       "5                0.004302                 0.042585  \n",
+       "6                0.008870                 0.102081  \n",
+       "7                0.000545                 0.044459  \n",
+       "8                0.006243                 0.069045  \n",
+       "9                0.002897                 0.062133  \n",
+       "\n",
+       "[10 rows x 63 columns]"
+      ]
+     },
+     "execution_count": 18,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "sub = pd.DataFrame(preds)\n",
+    "# Set column names to those generated by the one-hot encoding earlier\n",
+    "col_names = one_hot.columns.values\n",
+    "sub.columns = col_names\n",
+    "# Insert the column id from the sample_submission at the start of the data frame\n",
+    "sub.insert(0, 'id', df_test['id'])\n",
+    "sub.head(10)"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.6.2"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
