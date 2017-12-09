@@ -101,3 +101,4 @@ ENV/
 .mypy_cache/
 
 tb/run0/events\.out\.tfevents\.1512318542\.instance-2
+models/*
