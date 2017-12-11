@@ -35,8 +35,8 @@ The idea is to use the pre-trained VGG19 model and do fine-tuning.
 
 Our second objectif is to **otpimize** the current algorithm. + fine tuning
 
-1. VGG19 optimization
-We use predetermined optimizer. Plus, we pply data augmentation and fitting.
+1. VGG19 optimization:
+We use predetermined optimizer. Plus, we apply data augmentation and fitting.
 
 *RESULTS*
 
