@@ -23,11 +23,13 @@ The CNN is composed of the following layers:
 * **Pooling** layer
 Then after repeating it a few times, the CNN is **Fully Connected** in order to classify the samples. Finally a **Batch Normalization** is applied.
 
-We operate an binary classification first. Then from this, we apply this algorithm to the dogs samples. This experiment provides us great results!
+## Training
+
+Then from this, we apply this algorithm to the dogs samples. This experiment provides us great results!
 
 *RESULTS*
 
-## Training
+## Transfer learning
 
 Secondly, we use another tool ([Keras VGG19 starter](https://www.kaggle.com/orangutan/keras-vgg19-starter/notebook)). The data processed are the dogs samples. The main steps of the code:
 * the breeds are one-hot encoded for the final submission 
