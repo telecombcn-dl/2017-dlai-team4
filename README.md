@@ -63,6 +63,6 @@ The idea is to add a Convolution layer, an Activation layer and a Pooling layer.
 
 *RESULTS*
 
-**All in all
+## All in all
 
 Through this project, we learn a lot about neural networks and especially how to design and improve them. 
