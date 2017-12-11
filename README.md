@@ -5,7 +5,7 @@ Welcome to our GitHub page! You will find here a review of our work.
 
 Our team is composed by:
 
-![Mattia] (/images/mattia.png)|![Aude] (/images/aude.png)|![Paolo] (/images/paolo.png)            
+![Mattia] (https://github.com/telecombcn-dl/2017-dlai-team4/blob/master/images/mattia.png)|![Aude] (https://github.com/telecombcn-dl/2017-dlai-team4/blob/master/images/aude.png)|![Paolo] (https://github.com/telecombcn-dl/2017-dlai-team4/blob/master/images/paolo.png)            
 ------------ | ------------ |------------ 
   Mattia LECCI |   Aude RAZAFIMBELO |   Paolo TESTOLINA
 
@@ -27,7 +27,7 @@ To launch our work, we use an already existing code ([Keras VGG19 starter](https
 From here, we **experiment with the code** by trying to apply different hyperparameters, layers, loss and activation functions.
 The idea is to use the pre-trained VGG19 model and do fine-tuning.
 
-![VGG19] (/images/vgg19.png)  
+![VGG19] (https://github.com/telecombcn-dl/2017-dlai-team4/blob/master/images/vgg19.png)  
 
 
 ## Task 2
