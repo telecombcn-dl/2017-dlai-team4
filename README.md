@@ -23,7 +23,7 @@ The CNN is composed of the following layers:
 * **Pooling** layer
 Then after repeating it a few times, the CNN is **Fully Connected** in order to classify the samples. Finally a **Batch Normalization** is applied.
 
-From this, we apply this algorithm to the dogs samples. This experiment provides us great results!
+We operate an binary classification first. Then from this, we apply this algorithm to the dogs samples. This experiment provides us great results!
 
 *RESULTS*
 
