@@ -26,7 +26,7 @@ Then after repeating it a few times, the CNN is **Fully Connected** in order to 
 
 ## Training
 
-Then from this, we apply this algorithm to the dogs samples. This experiment provides us great results!
+From this, we apply this algorithm to the dogs samples. This experiment provides us great results!
 
 *RESULTS*
 
