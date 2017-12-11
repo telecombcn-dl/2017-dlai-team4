@@ -37,25 +37,15 @@ Our second objectif is to **otpimize** the current algorithm. + fine tuning
 
 1. VGG19 optimization:
 We use predetermined optimizer. Plus, we apply data augmentation and fitting.
-
 *RESULTS*
-
 2. Add hyperparameters for optimization: **Adam optimizer**
-
 *RESULTS - VGG19 optimization adam*
-
 3. Add hyperparameters for optimization: **Sgd optimizer**
-
 *RESULTS - not that good*
-
 4. Combination of VGG19 and VGG16
-
 *REULTS of the perfromance and overall reults evaluation*
-
 5. Add BatchNormalization to VGG16: **Xception optimization**
-
 *RESULTS - quite good*
-
 
 ## Task 3
 
