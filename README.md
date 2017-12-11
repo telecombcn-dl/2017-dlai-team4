@@ -15,7 +15,8 @@ The **objective** of our work is to determine the bread of a dog from an image. 
 ## Task 1
 
 To launch our work, we use an already existing code ([Keras VGG19 starter](https://www.kaggle.com/orangutan/keras-vgg19-starter/notebook)). The data processed are the CSV files which contain the labels' breeds and the samples of the animals to be submit. The main steps of the code:
-* the breeds are one-hot encoded for the final submission; there are in total 120 different breeds/ classes
+* the breeds are one-hot encoded for the final submission 
+* there are in total 120 different breeds/ classes
 * the images are resized
 * the test, train and validation sets are defined
 * the CNN architecture is built using a **pre-trained model VGG19** and adding a new top layer
