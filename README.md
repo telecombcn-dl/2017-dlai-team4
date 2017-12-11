@@ -5,7 +5,7 @@ Welcome to our GitHub page! You will find here a review of our work.
 
 Our team is composed by:
 
-![Mattia](https://github.com/auderaza/test/blob/master/mattia.png)|![Aude](https://github.com/auderaza/test/blob/master/aude.png)|![Paolo](https://github.com/auderaza/test/blob/master/paolo.png)            
+![Mattia image](http://github.com/auderaza/test/blob/master/mattia.png)|![Aude image](https://github.com/auderaza/test/blob/master/aude.png)|![Paolo image](https://github.com/auderaza/test/blob/master/paolo.png)            
 ------------ | ------------ |------------ 
   Mattia LECCI |   Aude RAZAFIMBELO |   Paolo TESTOLINA
 
@@ -42,7 +42,7 @@ Secondly, we use another tool ([Keras VGG19 starter](https://www.kaggle.com/oran
 From here, we **experiment with the code** by trying to apply different hyperparameters, layers, loss and activation functions.
 The idea is to use the pre-trained VGG19 model.
 
-![VGG19](https://github.com/telecombcn-dl/2017-dlai-team4/blob/master/images/vgg19.png)  
+![VGG19 image](https://github.com/telecombcn-dl/2017-dlai-team4/blob/master/images/vgg19.png)  
 
 ## Optimization
 
