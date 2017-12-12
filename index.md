@@ -13,7 +13,7 @@ The **goal** of our work is to classify dogs images according to their breeds. T
 
 In order to start working directly on the Neural Network specific code, we used already existing code from Kaggle ([MNIST starter code](https://github.com/yashk2810/MNIST-Keras/blob/master/Notebook/MNIST_keras_CNN-99.55%25.ipynb)). This allowed us to learn more quickly without wasting time on image loading, encodings and language specific problems that may arise for python newbies.
 
-### MNIT Architecture
+### MNIST Architecture
 The CNN is composed by the following layers: 
 
 * Conv2D(32)
@@ -41,44 +41,42 @@ After using an Adam optimizer and adding 2 dropouts in the middle of the network
 ![](images/mnist.png?raw=true)
 
 ### Binary Classification Architecture
-We looked into a CNN that classifies cats and dogs with great accuracy (over 95%). We tried to adapt it to multiclass classification but it's performance were poor, probably due to the far more complicated problem. We also tried to look into a direct extension of many binary classifiers into a single multiclass one, but what we found out was far too complicated to be implemented in this project (Erin L. Allwein, Robert E. Schapire, Yoram Singer. “![Reducing Multiclass to Binary: A Unifying Approach for Margin Classifiers.](http://www.jmlr.org/papers/volume1/allwein00a/allwein00a.pdf)”. Journal of Machine Learning Research.).
+We looked into a CNN that classifies cats and dogs with great accuracy (over 95%). We tried to adapt it to multiclass classification but it's performance were poor, probably due to the far more complicated problem. We also tried to look into a direct extension of many binary classifiers into a single multiclass one, but what we found out was far too complicated to be implemented in this project (Erin L. Allwein, Robert E. Schapire, Yoram Singer. “[Reducing Multiclass to Binary: A Unifying Approach for Margin Classifiers.](http://www.jmlr.org/papers/volume1/allwein00a/allwein00a.pdf)”. Journal of Machine Learning Research.).
 
-## Transfer learning
+### Transfer learning: VGG19
 
-Secondly, we use another tool ([Keras VGG19 starter](https://www.kaggle.com/orangutan/keras-vgg19-starter/notebook)). The data processed are still the dogs samples. The main steps of the code:
+As a second baseline, we used a Transfer Learning technique based on [Keras VGG19 starter](https://www.kaggle.com/orangutan/keras-vgg19-starter/notebook). Again, to avoid wasting time on language specific problems, we just copied most of the code modifying only the interesting parts.
 
-* the breeds are one-hot encoded for the final submission 
-* there are in total 120 different breeds/ classes
-* the images are resized
-* the test, train and validation sets are defined
-* the CNN architecture is built using a **pre-trained model VGG19** and adding a new top layer
+The main modifications were:
 
-From here, we **experiment with the code** by trying to apply different hyperparameters, layers, loss and activation functions.
-The idea is to use the pre-trained VGG19 model.
+* Using the image-net pre-trained weights for VGG19
+* Adding as output layers Dense(1024,ReLU), Dense(512,ReLU), Dense(120,softmax)
+* Using fit_generator instead of fit
+* Using an ImageDataGenerator to perform random transformations on input images (Data Augmentation)
 
-![](images/vgg19.png?raw=true?raw=true)  
+![](images/vgg19.png?raw=true?raw=true)
 
-## Optimization
 
- We then **otpimize** the current algorithm by through different ways.
+We then **otpimize** the architecture in many different ways:
 
-1. VGG19 optimization
+* We started by optimizing the dropout probability right before our new top layer, choosing the best optimizer (sgd,adam,rmsprop) and choosing the best batch size (16,32,64,128,256).
+* Then, finding that Adam performed best, we tried to optimized its parameters (learning rate, beta_1, beta_2, decay).
+* We also tried to optimize SGD's parameters to how it performs. Result: way worse than Adam. Probably it's simplicity is not adequate for this problem.
+* Since overfitting was still an issue, we optimized again with a higher dropout probability, adding a variable number of output layers (0,1,2), unfreezing some of the last few layers of VGG19 and, again, on the batch size (16,64,256)
+* Lastly, we added an extra Dense(2048,ReLU) right after the flattening. We optimized over the kernel regularization of this layer (lambda parameter) and adding or not an extra bottleneck layer (a Dense(100,ReLU) between Dense(2048) and Dense(1024)).
+
+We saw that in general VGG19 tended to overfit a lot, hence it required some regularization techniques. At the end, though, it didn't improved much the results from those obtained from the blank MNIST example architecture. it possible that to avoid the overfitting problem, the regularization needed was enough to reduce the model's performance.
+
+We report here an example of clearly overfitted run.
 
 ![](images/vgg19result.png?raw=true)
 
-We can see that the model is overfitting: the final value of the accuracy almost reach 1.00 and the final value of the loss almost rech 0.00. 
 
-2. Add hyperparameters for optimization: **Adam optimizer**
-
-3. Add hyperparameters for optimization: **Sgd optimizer**
-
-4. Combination of VGG19 and VGG16
+### Transfer learning: VGG16
 
 ![](images/vgg16.png?raw=true)
 
-The accuracy reaches 0.33.
-
-5. Add BatchNormalization to VGG16: **Xception optimization**
+### Transfer learning: Xception
 
 ## What we learned from the project
 
