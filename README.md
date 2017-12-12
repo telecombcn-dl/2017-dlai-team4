@@ -5,13 +5,9 @@ Welcome to our GitHub page! You will find here a review of our work.
 
 Our team is composed by:
 
-| ![Javier de la Rica][image-mattia] | ![Eva Julian][image-eva] | ![Alberto Montes][image-alberto] | ![Andrés Rojas][image-andres] | ![Daniel Saez][image-daniel] |
-| :---: | :---: | :---: | :---: | :---: |
-| Javier de la Rica | Eva Julian | Alberto Montes | Andrés Rojas | Daniel Saez |
-
-![Mattia image](https://github.com/auderaza/test/blob/master/mattia.png)|![Aude image](https://github.com/telecombcn-dl/2017-dlai-team4/blob/master/images/aude.jpg)|![Paolo image](https://github.com/auderaza/test/blob/master/paolo.png)            
------------- | ------------ |------------ 
-  Mattia LECCI |   Aude RAZAFIMBELO |   Paolo TESTOLINA
+| ![Mattia image](https://github.com/auderaza/test/blob/master/mattia.png)| ![Aude image](https://github.com/telecombcn-dl/2017-dlai-team4/blob/master/images/aude.jpg) | ![Paolo image](https://github.com/auderaza/test/blob/master/paolo.png) |        
+| :---: | :---: | :---: | 
+| Mattia LECCI | Aude RAZAFIMBELO | Paolo TESTOLINA |
 
 The **goal** of our work is to classify dogs images according to their breeds. To do so, we perform the different tasks presented here.
 
