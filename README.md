@@ -9,14 +9,14 @@ Our team is composed by:
 ------------ | ------------ |------------ 
   Mattia LECCI |   Aude RAZAFIMBELO |   Paolo TESTOLINA
 
-The **objective** of our work is to determine the bread of a dog from an image. To do so, we perform the different following tasks.
+The **goal** of our work is to classify dogs images according to their breeds. To do so, we perform the different tasks that we present you.
 
 
 ## Architecture
 
-To launch our work, we use an already existing code ([MNIST starter code](https://github.com/yashk2810/MNIST-Keras/blob/master/Notebook/MNIST_keras_CNN-99.55%25.ipynb)). It permits us to have a first approach on manipulating a neural network. The data processed are the MNIST data.
+To launch our work, we use an already existing code ([MNIST starter code](https://github.com/yashk2810/MNIST-Keras/blob/master/Notebook/MNIST_keras_CNN-99.55%25.ipynb)). It permits us to have a first approach on manipulating a neural network. 
 
-The CNN is composed of the following layers: 
+The CNN is composed by the following layers: 
 
 * **Convolution** layer
 * **Activation** layer
@@ -26,13 +26,14 @@ Then after repeating it a few times, the CNN is **Fully Connected** in order to 
 
 ## Training
 
-From this, we apply this algorithm to the dogs samples. This experiment provides us great results!
+From this, we apply this algorithm to the dogs samples. This experimentation provides us great results: the accurary reaches 0.22.
 
 *RESULTS*
 
 ## Transfer learning
 
-Secondly, we use another tool ([Keras VGG19 starter](https://www.kaggle.com/orangutan/keras-vgg19-starter/notebook)). The data processed are the dogs samples. The main steps of the code:
+Secondly, we use another tool ([Keras VGG19 starter](https://www.kaggle.com/orangutan/keras-vgg19-starter/notebook)). The data processed are still the dogs samples. The main steps of the code:
+
 * the breeds are one-hot encoded for the final submission 
 * there are in total 120 different breeds/ classes
 * the images are resized
@@ -49,7 +50,8 @@ The idea is to use the pre-trained VGG19 model.
  We then **otpimize** the current algorithm by through different ways.
 
 1. VGG19 optimization
-*RESULTS* - Overfitting of the model
+*RESULTS*
+We can see that the model is overfitting: the final value of the accuracy almost reach 1.00 and the final value of the loss almost rech 0.00. 
 
 2. Add hyperparameters for optimization: **Adam optimizer**
 
@@ -57,9 +59,16 @@ The idea is to use the pre-trained VGG19 model.
 
 4. Combination of VGG19 and VGG16
 *RESULTS*
+The accuracy reaches 0.33.
 
 5. Add BatchNormalization to VGG16: **Xception optimization**
 
-## All in all
+## What we learn from the project
 
-Through this project, we were able to manipulate a bunch of new technologies such as Python, TensorBoard and GCloud. Moreover, we learn how to design and improve basic neural networks. 
+Through this project, we were able to manipulate a bunch of new technologies such as:
+* Python
+* TensorBoard
+* GCloud
+* GitHub.
+Moreover, we learned how to design a basic neural networks. We were able to manipulate the given network in order to improve it and fit it to our model.
+As we were beginners in pratical neural network, we can now assume we have gained some basics!
