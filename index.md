@@ -2,7 +2,7 @@
 
 Our team is composed by:
 
-| ![Mattia-image](images/mattia.png)| ![Aude-image](images/aude.png) | ![Paolo-image](images/paolo.png) |        
+| ![](images/mattia.png)| ![](images/aude.png) | ![](images/paolo.png) |        
 | :---: | :---: | :---: | 
 | Mattia LECCI | Aude RAZAFIMBELO | Paolo TESTOLINA |
 
