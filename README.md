@@ -5,64 +5,72 @@ Welcome to our GitHub page! You will find here a review of our work.
 
 Our team is composed by:
 
-![Mattia] (/images/mattia.png)|![Aude] (/images/aude.png)|![Paolo] (/images/paolo.png)            
+![Mattia image](https://github.com/auderaza/test/blob/master/mattia.png)|![Aude image](https://github.com/auderaza/test/blob/master/aude.png)|![Paolo image](https://github.com/auderaza/test/blob/master/paolo.png)            
 ------------ | ------------ |------------ 
   Mattia LECCI |   Aude RAZAFIMBELO |   Paolo TESTOLINA
 
-The **objective** of our work is to determine the bread of a dog from an image. To do so,we perform the different following tasks.
+The **goal** of our work is to classify dogs images according to their breeds. To do so, we perform the different tasks that we present you.
 
 
-## Task 1
+## Architecture
 
-To launch our work, we use an already existing code ([Keras VGG19 starter](https://www.kaggle.com/orangutan/keras-vgg19-starter/notebook)). The data processed are the CSV files which contain the labels' breeds and the samples of the animals to be submit. The main steps of the code:
-* the breeds are one-hot encoded for the final submission; there are in total 120 different breeds/ classes
+To launch our work, we use an already existing code ([MNIST starter code](https://github.com/yashk2810/MNIST-Keras/blob/master/Notebook/MNIST_keras_CNN-99.55%25.ipynb)). It permits us to have a first approach on manipulating a neural network. 
+
+The CNN is composed by the following layers: 
+
+* **Convolution** layer
+* **Activation** layer
+* **Pooling** layer
+
+Then after repeating it a few times, the CNN is **Fully Connected** in order to classify the samples. Finally a **Batch Normalization** is applied.
+
+## Training
+
+From this, we apply this algorithm to the dogs samples. This experimentation provides us great results: the accurary reaches 0.22.
+
+*RESULTS*
+
+## Transfer learning
+
+Secondly, we use another tool ([Keras VGG19 starter](https://www.kaggle.com/orangutan/keras-vgg19-starter/notebook)). The data processed are still the dogs samples. The main steps of the code:
+
+* the breeds are one-hot encoded for the final submission 
+* there are in total 120 different breeds/ classes
 * the images are resized
 * the test, train and validation sets are defined
 * the CNN architecture is built using a **pre-trained model VGG19** and adding a new top layer
 
-*This model provides a very low accuracy as the pre-trained weights are not used.*
-
-*RESULTS*
-
 From here, we **experiment with the code** by trying to apply different hyperparameters, layers, loss and activation functions.
-The idea is to use the pre-trained VGG19 model and do fine-tuning.
+The idea is to use the pre-trained VGG19 model.
 
-![VGG19] (/images/vgg19.png)  
+![VGG19 image](https://github.com/telecombcn-dl/2017-dlai-team4/blob/master/images/vgg19.png)  
 
+## Optimization
 
-## Task 2
-
-Our second objectif is to **otpimize** the current algorithm. + fine tuning
+ We then **otpimize** the current algorithm by through different ways.
 
 1. VGG19 optimization
-We use predetermined optimizer. Plus, we pply data augmentation and fitting.
 
 *RESULTS*
+We can see that the model is overfitting: the final value of the accuracy almost reach 1.00 and the final value of the loss almost rech 0.00. 
 
 2. Add hyperparameters for optimization: **Adam optimizer**
 
-*RESULTS - VGG19 optimization adam*
-
 3. Add hyperparameters for optimization: **Sgd optimizer**
-
-*RESULTS - not that good*
 
 4. Combination of VGG19 and VGG16
 
-*REULTS of the perfromance and overall reults evaluation*
+*RESULTS*
+The accuracy reaches 0.33.
 
 5. Add BatchNormalization to VGG16: **Xception optimization**
 
-*RESULTS - quite good*
+## What we learned from the project
 
-
-## Task 3
-
-To go further, we build another CNN, based on the previsous VGG19 model, which perform **Multiclassification**.
-The idea is to add a Convolution layer, an Activation layer and a Pooling layer. Then after repeating it a few times, the CNN is Fully Connected in order to classify the samples. Finally a Batch Normalization is applied.
-
-*RESULTS*
-
-## All in all
-
-Through this project, we learn a lot about neural networks and especially how to design and improve them. 
+Through this project, we were able to manipulate a bunch of new technologies such as:
+* Python
+* TensorBoard
+* GCloud
+* GitHub.
+Moreover, we learned how to design a basic neural networks. We were able to manipulate the given network in order to improve it and fit it to our model.
+As we were beginners in pratical neural network, we can now assume we have gained some basics!
