@@ -1,6 +1,8 @@
 # 2017-dlai-team4 
-DLAI 2017 Team 4
+DLAI 2017 Team 4:
 
-Mattia LECCI 
-Paolo TESTOLINA 
+Mattia LECCI
+
+Paolo TESTOLINA
+
 Aude RAZAFIMBELO

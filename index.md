@@ -2,7 +2,7 @@
 
 Our team is composed by:
 
-| ![Mattia-image](https://github.com/telecombcn-dl/2017-dlai-team4/blob/master/images/mattia.png)| ![Aude-image](https://github.com/telecombcn-dl/2017-dlai-team4/blob/master/images/aude.png) | ![Paolo-image](https://github.com/telecombcn-dl/2017-dlai-team4/blob/master/images/paolo.png) |        
+| ![Mattia-image](images/mattia.png)| ![Aude-image](images/aude.png) | ![Paolo-image](images/paolo.png) |        
 | :---: | :---: | :---: | 
 | Mattia LECCI | Aude RAZAFIMBELO | Paolo TESTOLINA |
 
