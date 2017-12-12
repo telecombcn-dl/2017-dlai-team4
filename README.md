@@ -71,3 +71,7 @@ Through this project, we were able to manipulate a bunch of new technologies suc
 * GitHub.
 Moreover, we learned how to design a basic neural networks. We were able to manipulate the given network in order to improve it and fit it to our model.
 As we were beginners in pratical neural network, we can now assume we have gained some basics!
+
+## More information
+
+Here are the [Slides of our presentation](https://docs.google.com/presentation/d/1Ll6pUaIbTFKg-3NNc8YemHoBIV9hcGibhmGtIceK0Rc/edit?usp=sharing), that provide further information.
