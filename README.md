@@ -9,7 +9,7 @@ Our team is composed by:
 ------------ | ------------ |------------ 
   Mattia LECCI |   Aude RAZAFIMBELO |   Paolo TESTOLINA
 
-The **goal** of our work is to classify dogs images according to their breeds. To do so, we perform the different tasks that we present you.
+The **goal** of our work is to classify dogs images according to their breeds. To do so, we perform the different tasks presented here.
 
 
 ## Architecture
