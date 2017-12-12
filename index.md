@@ -25,7 +25,7 @@ Then after repeating it a few times, the CNN is **Fully Connected** in order to 
 
 From this, we apply this algorithm to the dogs samples. This experimentation provides us great results: the accurary reaches 0.22.
 
-![MNIST best model result - image](https://github.com/telecombcn-dl/2017-dlai-team4/blob/master/images/mnist.png)
+![MNIST best model result - image](images/mnist.png)
 
 ## Transfer learning
 
@@ -40,7 +40,7 @@ Secondly, we use another tool ([Keras VGG19 starter](https://www.kaggle.com/oran
 From here, we **experiment with the code** by trying to apply different hyperparameters, layers, loss and activation functions.
 The idea is to use the pre-trained VGG19 model.
 
-![VGG19 model - image](https://github.com/telecombcn-dl/2017-dlai-team4/blob/master/images/vgg19.png)  
+![VGG19 model - image](images/vgg19.png)  
 
 ## Optimization
 
@@ -48,7 +48,7 @@ The idea is to use the pre-trained VGG19 model.
 
 1. VGG19 optimization
 
-![VGG19 results - image](https://github.com/telecombcn-dl/2017-dlai-team4/blob/master/images/vgg19result.png)
+![VGG19 results - image](images/vgg19result.png)
 
 We can see that the model is overfitting: the final value of the accuracy almost reach 1.00 and the final value of the loss almost rech 0.00. 
 
@@ -58,7 +58,7 @@ We can see that the model is overfitting: the final value of the accuracy almost
 
 4. Combination of VGG19 and VGG16
 
-![VGG16 results - image](https://github.com/telecombcn-dl/2017-dlai-team4/blob/master/images/vgg16.png)
+![VGG16 results - image](images/vgg16.png)
 
 The accuracy reaches 0.33.
 
