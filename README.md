@@ -50,6 +50,7 @@ The idea is to use the pre-trained VGG19 model.
  We then **otpimize** the current algorithm by through different ways.
 
 1. VGG19 optimization
+
 *RESULTS*
 We can see that the model is overfitting: the final value of the accuracy almost reach 1.00 and the final value of the loss almost rech 0.00. 
 
@@ -58,12 +59,13 @@ We can see that the model is overfitting: the final value of the accuracy almost
 3. Add hyperparameters for optimization: **Sgd optimizer**
 
 4. Combination of VGG19 and VGG16
+
 *RESULTS*
 The accuracy reaches 0.33.
 
 5. Add BatchNormalization to VGG16: **Xception optimization**
 
-## What we learn from the project
+## What we learned from the project
 
 Through this project, we were able to manipulate a bunch of new technologies such as:
 * Python
