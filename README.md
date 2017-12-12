@@ -1,7 +1,4 @@
-# Dog Breed Identification
-## Kaggle Dog Breed Identification Challenge
-
-Welcome to our GitHub page! You will find here a review of our work.
+# Welcome to our GitHub page! You will find here a review of our work.
 
 Our team is composed by:
 
