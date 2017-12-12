@@ -5,7 +5,7 @@ Welcome to our GitHub page! You will find here a review of our work.
 
 Our team is composed by:
 
-![Mattia image](https://github.com/auderaza/test/blob/master/mattia.png)|![Aude image](https://github.com/auderaza/test/blob/master/aude.png)|![Paolo image](https://github.com/auderaza/test/blob/master/paolo.png)            
+![Mattia image](https://github.com/auderaza/test/blob/master/mattia.png)|![Aude image](https://github.com/telecombcn-dl/2017-dlai-team4/blob/master/images/aude.jpg)|![Paolo image](https://github.com/auderaza/test/blob/master/paolo.png)            
 ------------ | ------------ |------------ 
   Mattia LECCI |   Aude RAZAFIMBELO |   Paolo TESTOLINA
 
