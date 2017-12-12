@@ -89,13 +89,29 @@ Anyway, we used optimized this model less than the other since it's first run yi
 
 ## What we learned from the project
 
-Through this project, we were able to manipulate a bunch of new technologies such as:
-* Python
-* TensorBoard
-* GCloud
-* GitHub.
-Moreover, we learned how to design a basic neural networks. We were able to manipulate the given network in order to improve it and fit it to our model.
-As we were beginners in pratical neural network, we can now assume we have gained some basics!
+Since we all come from a telecommunication background, we are not expert programmes nor have much experience with Machine Learning-related topics.
+
+Hence, we learned quite a lot from this project, and not only about Deep Learning!
+
+Some transversal knowledge and skills that we learned are:
+* Setting up and accessing remote virtual machines
+* Accessing and using basic Google Cloud instances
+* Increased confidence with linux’ terminal
+* First experience with Git/Github
+* First steps with a new programming language: Python
+* First experience with Jupyter Notebooks
+* Studying research papers and obtain implementable code from them
+
+More DeeP Learning related knowledge, instead, was:
+* Creating Neural Networks from scratch using Keras
+* Manipulating existing architectures
+* Reading results (distinguishing between training and validation)
+* Methods to avoid overfitting
+* Hyperparameter optimization
+* Operating with callbacks
+* Operating with Tensorboard
+
+As we were beginners in Neural Network, we can now assume that we have gained some basics (and something more!).
 
 ## More information
 
