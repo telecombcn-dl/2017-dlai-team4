@@ -117,3 +117,7 @@ As we were beginners in Neural Network, we can now assume that we have gained so
 ## More information
 
 Here are the [Slides of our presentation](https://docs.google.com/presentation/d/1Ll6pUaIbTFKg-3NNc8YemHoBIV9hcGibhmGtIceK0Rc/edit?usp=sharing), that provide further information.
+
+## Notes
+
+Due to the many connectin problems that we had with Google Drive (as mentioned in the slides), a lot of the notebooks contain errors at the end. They are usually the notebooks that we let run overnight for many hours and when trying to save or evaluating the performance of the best model they crashed. The good thing, though, is that the training/optimization verbose outuputs were correctly saved.
