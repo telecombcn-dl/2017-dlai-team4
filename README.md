@@ -1,15 +1,12 @@
-# Dog Breed Identification
-## Kaggle Dog Breed Identification Challenge
-
-Welcome to our GitHub page! You will find here a review of our work.
+# Welcome to our GitHub page! You will find here a review of our work.
 
 Our team is composed by:
 
-![Mattia image](https://github.com/auderaza/test/blob/master/mattia.png)|![Aude image](https://github.com/auderaza/test/blob/master/aude.png)|![Paolo image](https://github.com/auderaza/test/blob/master/paolo.png)            
------------- | ------------ |------------ 
-  Mattia LECCI |   Aude RAZAFIMBELO |   Paolo TESTOLINA
+| ![Mattia image](https://github.com/auderaza/test/blob/master/mattia.png)| ![Aude image](https://github.com/telecombcn-dl/2017-dlai-team4/blob/master/images/aude.jpg) | ![Paolo image](https://github.com/auderaza/test/blob/master/paolo.png) |        
+| :---: | :---: | :---: | 
+| Mattia LECCI | Aude RAZAFIMBELO | Paolo TESTOLINA |
 
-The **goal** of our work is to classify dogs images according to their breeds. To do so, we perform the different tasks that we present you.
+The **goal** of our work is to classify dogs images according to their breeds. To do so, we perform the different tasks presented here.
 
 
 ## Architecture
@@ -74,3 +71,7 @@ Through this project, we were able to manipulate a bunch of new technologies suc
 * GitHub.
 Moreover, we learned how to design a basic neural networks. We were able to manipulate the given network in order to improve it and fit it to our model.
 As we were beginners in pratical neural network, we can now assume we have gained some basics!
+
+## More information
+
+Here are the [Slides of our presentation](https://docs.google.com/presentation/d/1Ll6pUaIbTFKg-3NNc8YemHoBIV9hcGibhmGtIceK0Rc/edit?usp=sharing), that provide further information.
