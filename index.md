@@ -9,21 +9,34 @@ Our team is composed by:
 The **goal** of our work is to classify dogs images according to their breeds. To do so, we tried different architectures, techniques and optimizations as presented in the following sections.
 
 
-## Architecture
+## Architectures
 
-To launch our work, we use an already existing code ([MNIST starter code](https://github.com/yashk2810/MNIST-Keras/blob/master/Notebook/MNIST_keras_CNN-99.55%25.ipynb)). It permits us to have a first approach on manipulating a neural network. 
+In order to start working directly on the Neural Network specific code, we used already existing code from Kaggle ([MNIST starter code](https://github.com/yashk2810/MNIST-Keras/blob/master/Notebook/MNIST_keras_CNN-99.55%25.ipynb)). This allowed us to learn more quickly without wasting time on image loading, encodings and language specific problems that may arise for python newbies.
 
+### MNIT Architecture
 The CNN is composed by the following layers: 
 
-* **Convolution** layer
-* **Activation** layer
-* **Pooling** layer
+* Conv2D(32)
+* Batch Normalization
+* ReLU
+* Conv2D(32,ReLU)
+* Max Pooling
+* Batch Normalization
+* Conv2D(64)
+* Batch Normalization
+* ReLU
+* Conv2D(64,ReLU)
+* Max Pooling
+* Flatten
+* Batch Normalization
+* Dense(512)
+* Batch Normalization
+* ReLU
+* Dense(120,softmax)
 
-Then after repeating it a few times, the CNN is **Fully Connected** in order to classify the samples. Finally a **Batch Normalization** is applied.
-
-## Training
-
-From this, we apply this algorithm to the dogs samples. This experimentation provides us great results: the accurary reaches 0.22.
+During the optimization processes dropout was inserted between some layers, optimizing on the number of dropout layers and the dropour probability.
+With this model we were able to obtain acc=15%, val_acc=5%.
+After using an Adam optimizer and adding 2 dropouts in the middle of the network we were able to obtain up to acc=22%, val_acc=12%. ([NewModel_best_run](https://github.com/telecombcn-dl/2017-dlai-team4/blob/master/code/NewModel_best_run.ipynb))
 
 ![](images/mnist.png?raw=true)
 
