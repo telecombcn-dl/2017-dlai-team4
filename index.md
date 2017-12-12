@@ -40,6 +40,9 @@ After using an Adam optimizer and adding 2 dropouts in the middle of the network
 
 ![](images/mnist.png?raw=true)
 
+### Binary Classification Architecture
+We looked into a CNN that classifies cats and dogs with great accuracy (over 95%). We tried to adapt it to multiclass classification but it's performance were poor, probably due to the far more complicated problem. We also tried to look into a direct extension of many binary classifiers into a single multiclass one, but what we found out was far too complicated to be implemented in this project (Erin L. Allwein, Robert E. Schapire, Yoram Singer. “![Reducing Multiclass to Binary: A Unifying Approach for Margin Classifiers.](http://www.jmlr.org/papers/volume1/allwein00a/allwein00a.pdf)”. Journal of Machine Learning Research.).
+
 ## Transfer learning
 
 Secondly, we use another tool ([Keras VGG19 starter](https://www.kaggle.com/orangutan/keras-vgg19-starter/notebook)). The data processed are still the dogs samples. The main steps of the code:
