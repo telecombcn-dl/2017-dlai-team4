@@ -2,7 +2,7 @@
 
 Our team is composed by:
 
-| ![Mattia image](https://github.com/auderaza/test/blob/master/mattia.png)| ![Aude image](https://github.com/telecombcn-dl/2017-dlai-team4/blob/master/images/aude.jpg) | ![Paolo image](https://github.com/auderaza/test/blob/master/paolo.png) |        
+| ![Mattia-image](https://github.com/auderaza/test/blob/master/mattia.png)| ![Aude-image](https://github.com/telecombcn-dl/2017-dlai-team4/blob/master/images/aude.jpg) | ![Paolo-image](https://github.com/auderaza/test/blob/master/paolo.png) |        
 | :---: | :---: | :---: | 
 | Mattia LECCI | Aude RAZAFIMBELO | Paolo TESTOLINA |
 
@@ -25,7 +25,7 @@ Then after repeating it a few times, the CNN is **Fully Connected** in order to 
 
 From this, we apply this algorithm to the dogs samples. This experimentation provides us great results: the accurary reaches 0.22.
 
-*RESULTS*
+![MNIST best model result - image]
 
 ## Transfer learning
 
@@ -40,7 +40,7 @@ Secondly, we use another tool ([Keras VGG19 starter](https://www.kaggle.com/oran
 From here, we **experiment with the code** by trying to apply different hyperparameters, layers, loss and activation functions.
 The idea is to use the pre-trained VGG19 model.
 
-![VGG19 image](https://github.com/telecombcn-dl/2017-dlai-team4/blob/master/images/vgg19.png)  
+![VGG19 model - image](https://github.com/telecombcn-dl/2017-dlai-team4/blob/master/images/vgg19.png)  
 
 ## Optimization
 
@@ -48,7 +48,8 @@ The idea is to use the pre-trained VGG19 model.
 
 1. VGG19 optimization
 
-*RESULTS*
+![VGG19 results - image]
+
 We can see that the model is overfitting: the final value of the accuracy almost reach 1.00 and the final value of the loss almost rech 0.00. 
 
 2. Add hyperparameters for optimization: **Adam optimizer**
@@ -57,7 +58,8 @@ We can see that the model is overfitting: the final value of the accuracy almost
 
 4. Combination of VGG19 and VGG16
 
-*RESULTS*
+![VGG16 results - image]
+
 The accuracy reaches 0.33.
 
 5. Add BatchNormalization to VGG16: **Xception optimization**
@@ -74,4 +76,4 @@ As we were beginners in pratical neural network, we can now assume we have gaine
 
 ## More information
 
-Here are the [Slides of our presentation](https://docs.google.com/presentation/d/1Ll6pUaIbTFKg-3NNc8YemHoBIV9hcGibhmGtIceK0Rc/edit?usp=sharing), that provide further information.
+Here are the **[Slides of our presentation]**(https://docs.google.com/presentation/d/1Ll6pUaIbTFKg-3NNc8YemHoBIV9hcGibhmGtIceK0Rc/edit?usp=sharing), that provide further information.
