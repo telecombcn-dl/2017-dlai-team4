@@ -65,14 +65,18 @@ We then **otpimize** the architecture in many different ways:
 * Since overfitting was still an issue, we optimized again with a higher dropout probability, adding a variable number of output layers (0,1,2), unfreezing some of the last few layers of VGG19 and, again, on the batch size (16,64,256)
 * Lastly, we added an extra Dense(2048,ReLU) right after the flattening. We optimized over the kernel regularization of this layer (lambda parameter) and adding or not an extra bottleneck layer (a Dense(100,ReLU) between Dense(2048) and Dense(1024)).
 
-We saw that in general VGG19 tended to overfit a lot, hence it required some regularization techniques. At the end, though, it didn't improved much the results from those obtained from the blank MNIST example architecture. it possible that to avoid the overfitting problem, the regularization needed was enough to reduce the model's performance.
+We saw that in general VGG19 tended to overfit a lot, hence it required some regularization techniques. At the end, though, it improved over the results from the blank MNIST example architecture but not much. It was able to obtain up to val_acc=17%. It possible that to avoid the overfitting problem, the regularization needed was enough to reduce the model's performance.
 
-We report here an example of clearly overfitted run.
+We report here an example of clearly overfitted run:
 
 ![](images/vgg19result.png?raw=true)
 
 
 ### Transfer learning: VGG16
+
+We've replicated what we've done with VGG19 with other pretrained models. The first, obvious, choice was it's little brother VGG16. It's basically the same model but with 3 missing layers. We hoped that a simpler architecture would yield less overfitting problems.
+
+This was in fact the case! Not only that, but with less overfitting control techniques we avoided crippling the real performance of the model obtaining far better results: up to acc=28%, val_acc=24%!
 
 ![](images/vgg16.png?raw=true)
 
