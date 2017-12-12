@@ -81,6 +81,11 @@ This was in fact the case! Not only that, but with less overfitting control tech
 ![](images/vgg16.png?raw=true)
 
 ### Transfer learning: Xception
+One last model that we tried was Xception. This is a tensorflow based model using a technique called Depthwise Separable Convolution.
+
+The particular thing about this model is that, althought it's a very deep network (much deeper than VGG16/19), the file containing its weight weighs only a fifth of those from the VGG family. This is due to its unique architecture.
+
+Anyway, we used optimized this model less than the other since it's first run yielded quite unsatisfactory results: val_acc=15% with no overfitting. Since it's only slightly better than the MNIST architecture and worse than both VGG19 and VGG16, we decided to abandon it quite soon.
 
 ## What we learned from the project
 
